@@ -14,7 +14,7 @@ public class SaveMgr_KJS : MonoBehaviour
     public Button loadButton;     // 불러오기 버튼
 
     private string saveDirectory = @"C:\Users\Admin\Desktop\UserInfo";
-    private string saveFileName = "ButtonTexts.json";
+    private string saveFileName = "Magazine.json";
     private string savePath;
 
     // 유저별 데이터를 저장하는 Dictionary
