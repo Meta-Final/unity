@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToolMgr : MonoBehaviour
+public class ToolMgr_KJS : MonoBehaviour
 {
+    public GameObject editorPanel;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +15,11 @@ public class ToolMgr : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnclickTogglePanel()
+    {
+        bool isActive = editorPanel.activeSelf;
+        editorPanel.SetActive(!isActive);
     }
 }
