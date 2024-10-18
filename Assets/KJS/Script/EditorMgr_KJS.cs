@@ -19,7 +19,6 @@ public class EditorMgr_KJS : MonoBehaviour
     private bool isItalic = false;
     private Button selectedButton;  // 현재 선택된 버튼
 
-    // 폰트 크기 배율 조정 (InputField 대비 버튼 폰트 크기)
     private const float FontSizeMultiplier = 1.5f;
 
     public void Start()
@@ -42,7 +41,6 @@ public class EditorMgr_KJS : MonoBehaviour
         boldButton.onClick.AddListener(OnBoldButtonClicked);
         italicButton.onClick.AddListener(OnItalicButtonClicked);
 
-        // InputField 텍스트 변경 시 호출
         inputField.onValueChanged.AddListener(OnInputFieldTextChanged);
 
         inputField.textComponent.fontSize = fontSize;
@@ -69,8 +67,6 @@ public class EditorMgr_KJS : MonoBehaviour
             fontSize = newSize;
             inputField.textComponent.fontSize = fontSize;
             fontSizeInputField.text = fontSize.ToString();
-
-            // 선택된 버튼의 폰트 크기 적용
             UpdateButtonTextStyle();
         }
     }
@@ -88,7 +84,6 @@ public class EditorMgr_KJS : MonoBehaviour
                 fontSizeDropdown.value = dropdownIndex;
             }
 
-            // 선택된 버튼의 폰트 크기 적용
             UpdateButtonTextStyle();
         }
         else
@@ -102,9 +97,6 @@ public class EditorMgr_KJS : MonoBehaviour
         isBold = !isBold;
         UpdateTextStyle();
         boldButton.GetComponent<Image>().color = isBold ? pressedColor : defaultColor;
-
-        // 선택된 버튼의 스타일 적용
-        UpdateButtonTextStyle();
     }
 
     public void OnItalicButtonClicked()
@@ -112,9 +104,6 @@ public class EditorMgr_KJS : MonoBehaviour
         isItalic = !isItalic;
         UpdateTextStyle();
         italicButton.GetComponent<Image>().color = isItalic ? pressedColor : defaultColor;
-
-        // 선택된 버튼의 스타일 적용
-        UpdateButtonTextStyle();
     }
 
     private void UpdateTextStyle()
@@ -123,40 +112,41 @@ public class EditorMgr_KJS : MonoBehaviour
 
         if (isBold) inputField.textComponent.fontStyle |= FontStyles.Bold;
         if (isItalic) inputField.textComponent.fontStyle |= FontStyles.Italic;
-    }
 
-    // 버튼 클릭 시 해당 버튼의 텍스트를 InputField에 복사
+        // 선택된 버튼의 텍스트 스타일도 업데이트
+        UpdateButtonTextStyle();
+    }
+    // 버튼의 텍스트를 InputField에 복사하고 스타일 동기화
     public void SetInputFieldTextFromButton(Button button)
     {
         selectedButton = button;  // 현재 선택된 버튼 저장
-        string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
-        inputField.text = buttonText;  // InputField에 버튼의 텍스트 표시
 
-        // 버튼의 스타일을 InputField에 동기화
+        // 버튼의 텍스트를 InputField에 복사
+        string buttonText = button.GetComponentInChildren<TextMeshProUGUI>().text;
+        inputField.text = buttonText;
+
+        // 버튼의 텍스트 스타일을 InputField에 반영
         TMP_Text buttonTextComponent = button.GetComponentInChildren<TMP_Text>();
         inputField.textComponent.fontSize = (int)(buttonTextComponent.fontSize / FontSizeMultiplier);
         inputField.textComponent.fontStyle = buttonTextComponent.fontStyle;
 
+        // 폰트 크기 InputField 업데이트
         fontSizeInputField.text = ((int)(buttonTextComponent.fontSize / FontSizeMultiplier)).ToString();
     }
 
-    // InputField 텍스트가 변경될 때마다 선택된 버튼의 텍스트를 업데이트
     public void OnInputFieldTextChanged(string newText)
     {
-        if (selectedButton != null)  // 선택된 버튼이 있을 경우에만 실행
+        if (selectedButton != null)
         {
             selectedButton.GetComponentInChildren<TextMeshProUGUI>().text = newText;
         }
     }
 
-    // 선택된 버튼의 텍스트 스타일 업데이트
     private void UpdateButtonTextStyle()
     {
-        if (selectedButton != null)  // 선택된 버튼이 있을 때만 실행
+        if (selectedButton != null)
         {
             TMP_Text buttonTextComponent = selectedButton.GetComponentInChildren<TMP_Text>();
-
-            // InputField의 폰트 스타일과 크기를 버튼에 적용 (1.5배 크기 조정)
             buttonTextComponent.fontSize = inputField.textComponent.fontSize * FontSizeMultiplier;
             buttonTextComponent.fontStyle = inputField.textComponent.fontStyle;
         }
