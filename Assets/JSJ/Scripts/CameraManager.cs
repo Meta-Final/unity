@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     public GameObject playerPrefab;
     public float followSpeed = 5f;
+    public float rotationSpeed = 5f;
 
     Vector3 offset;
 

@@ -21,9 +21,21 @@ public class PicketManager : MonoBehaviour
 
     public void MakePicket()
     {
-        picketPos = player.transform.position + player.transform.forward * 3f;
+        Ray ray = new Ray(player.transform.position, Vector3.down);
+        RaycastHit hit;
 
-        GameObject obj = Instantiate(picketPrefab, picketPos, Quaternion.identity);
-        obj.transform.LookAt(player.transform);
+        if (Physics.Raycast(ray, out hit))
+        {
+            // 'PicketZone' 에만 Picket 이 생성
+            if (hit.collider.gameObject.layer == 17)
+            {
+                picketPos = player.transform.position + player.transform.forward * 3f;
+
+                GameObject obj = Instantiate(picketPrefab, picketPos, Quaternion.identity);
+                obj.transform.LookAt(player.transform);
+
+            }
+        }
+        
     }
 }

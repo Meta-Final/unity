@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class ScreenshotHandler : MonoBehaviour
 {
+    public int superSize = 1;
+    int screenshotCount = 0;
+
     void Start()
     {
        
@@ -17,27 +20,19 @@ public class ScreenshotHandler : MonoBehaviour
         {
             CaptureScreenshot();
         }
-        
     }
 
+    // 스크린 캡쳐 함수
     public void CaptureScreenshot()
     {
-        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        Camera.main.targetTexture = renderTexture;
-        RenderTexture.active = renderTexture;
+        string screenshotFileName = "Screenshot_" + screenshotCount + ".png";
+        string savePath = Path.Combine(Application.dataPath, screenshotFileName);
+        
+        ScreenCapture.CaptureScreenshot(savePath, superSize);
+        screenshotCount++;
 
-        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenshot.Apply();
+        Debug.Log("스크린샷 저장됨: " + savePath);
 
-        // RenderTexture 초기화
-        RenderTexture.active = null;
-        Camera.main.targetTexture = null;
-
-        // 이미지 저장 및 인벤토리에 추가
-        string base64 = System.Convert.ToBase64String(screenshot.EncodeToPNG());
-        InventoryManager.instance.AddScreenshot(base64);
+        InventoryManager.instance.AddScreenshot(savePath);
     }
-
-    
 }
