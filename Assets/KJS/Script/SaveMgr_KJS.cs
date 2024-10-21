@@ -1,37 +1,42 @@
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;  // TextMeshPro 사용 시 필요
 
 public class SaveMgr_KJS : MonoBehaviour
 {
-    public List<Button> buttons;  // TMP 버튼들을 관리하는 리스트
-    public List<string> userIds;  // 유저 ID를 관리하는 리스트
-    public int selectedUserIndex = 0;  // 현재 선택된 유저 인덱스
+    public GameObject textBoxPrefab;
+    public GameObject imageBoxPrefab;
+    public GameObject pagePrefab;
 
-    public Button saveButton;     // 저장 버튼
-    public Button loadButton;     // 불러오기 버튼
+    public Transform parent;
 
-    private string saveDirectory = @"C:\Users\Admin\Desktop\UserInfo";
+    public List<GameObject> textBoxes = new List<GameObject>();
+    public List<GameObject> imageBoxes = new List<GameObject>();
+    public List<GameObject> pages = new List<GameObject>();
+
+    public List<string> userIds;
+    public int selectedUserIndex = 0;
+
+    public Button saveButton;
+    public Button loadButton;
+
+    private string saveDirectory = @"C:\Users\Admin\Documents\GitHub\unity\Assets\KJS\UserInfo";
     private string saveFileName = "Magazine.json";
     private string savePath;
 
-    // 유저별 데이터를 저장하는 Dictionary
     private Dictionary<string, UserPosts> userData = new Dictionary<string, UserPosts>();
 
     private void Start()
     {
         savePath = Path.Combine(saveDirectory, saveFileName);
 
-        // Save / Load 버튼 이벤트 연결
-        saveButton.onClick.AddListener(SaveButtonTextsToFile);
-        loadButton.onClick.AddListener(LoadButtonTextsFromFile);
+        saveButton.onClick.AddListener(SaveObjectsToFile);
+        loadButton.onClick.AddListener(LoadObjectsFromFile);
 
-        // 경로가 존재하지 않으면 폴더 생성
         EnsureDirectoryExists();
 
-        // JSON 파일이 이미 존재하면 데이터 로드
         if (File.Exists(savePath))
         {
             string json = File.ReadAllText(savePath);
@@ -50,15 +55,27 @@ public class SaveMgr_KJS : MonoBehaviour
 
     private string GetSelectedUserId()
     {
-        if (userIds.Count == 0 || selectedUserIndex < 0 || selectedUserIndex >= userIds.Count)
+        if (userIds == null || userIds.Count == 0)
         {
-            Debug.LogWarning("Invalid user index or user list is empty.");
+            Debug.LogWarning("User ID list is empty.");
             return null;
         }
+
+        if (selectedUserIndex < 0 || selectedUserIndex >= userIds.Count)
+        {
+            Debug.LogWarning("Invalid user index selected.");
+            return null;
+        }
+
         return userIds[selectedUserIndex];
     }
 
-    private void SaveButtonTextsToFile()
+    public void AddTextBox(GameObject textBox) => textBoxes.Add(textBox);
+    public void AddImageBox(GameObject imageBox) => imageBoxes.Add(imageBox);
+    public void AddPage(GameObject page) => pages.Add(page);
+    public void RemovePage(GameObject page) => pages.Remove(page);
+
+    private void SaveObjectsToFile()
     {
         string userId = GetSelectedUserId();
         if (userId == null) return;
@@ -69,95 +86,113 @@ public class SaveMgr_KJS : MonoBehaviour
         }
 
         UserPosts posts = userData[userId];
-        posts.posts.Clear();  // 기존 데이터 초기화
+        posts.posts.Clear();
 
-        // 각 버튼의 텍스트와 이미지 저장
-        foreach (Button button in buttons)
+        foreach (var textBox in textBoxes)
         {
-            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-            Image buttonImage = button.GetComponent<Image>();
+            TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
+            string content = textComponent != null ? textComponent.text : "";
 
-            string editorName = button.name;
-            string content = buttonText != null ? buttonText.text : "";
+            posts.posts.Add(new PostInfo("TextBox", content, "", textBox.transform.position, textBox.transform.localScale));
+        }
 
-            // 버튼에 할당된 이미지를 base64 문자열로 변환
+        foreach (var imageBox in imageBoxes)
+        {
+            Image imageComponent = imageBox.GetComponent<Image>();
             string imageBase64 = "";
-            if (buttonImage != null && buttonImage.sprite != null)
+
+            if (imageComponent != null && imageComponent.sprite != null)
             {
-                Texture2D texture = buttonImage.sprite.texture;
+                Texture2D texture = imageComponent.sprite.texture;
                 imageBase64 = TextureToBase64(texture);
             }
 
-            // PostInfo에 텍스트와 이미지 정보 저장
-            posts.posts.Add(new PostInfo(editorName, content, imageBase64));
+            posts.posts.Add(new PostInfo("ImageBox", "", imageBase64, imageBox.transform.position, imageBox.transform.localScale));
+        }
+
+        foreach (var page in pages)
+        {
+            posts.posts.Add(new PostInfo("Page", "", "", page.transform.position, page.transform.localScale));
         }
 
         string json = JsonUtility.ToJson(new SerializableDictionary(userData), true);
         File.WriteAllText(savePath, json);
 
-        Debug.Log($"Button texts and images saved for User ID: {userId}");
+        Debug.Log($"Data saved for User ID: {userId}");
     }
 
-    private void LoadButtonTextsFromFile()
+    private void LoadObjectsFromFile()
     {
         string userId = GetSelectedUserId();
         if (userId == null) return;
 
-        if (userData.ContainsKey(userId))
-        {
-            UserPosts posts = userData[userId];
-
-            for (int i = 0; i < posts.posts.Count; i++)
-            {
-                if (i < buttons.Count)
-                {
-                    TMP_Text buttonText = buttons[i].GetComponentInChildren<TMP_Text>();
-                    Image buttonImage = buttons[i].GetComponent<Image>();
-
-                    PostInfo post = posts.posts[i];
-
-                    if (buttonText != null)
-                    {
-                        buttonText.text = post.content;  // 텍스트 설정
-                    }
-
-                    // 이미지가 없으면 기존 이미지 제거
-                    if (string.IsNullOrEmpty(post.imageBase64))
-                    {
-                        if (buttonImage != null)
-                        {
-                            buttonImage.sprite = null;  // 기존 이미지 제거
-                            Debug.Log($"Image removed from button: {buttons[i].name}");
-                        }
-                    }
-                    else  // 이미지가 있으면 복원
-                    {
-                        Texture2D texture = Base64ToTexture(post.imageBase64);
-                        buttonImage.sprite = Sprite.Create(
-                            texture,
-                            new Rect(0, 0, texture.width, texture.height),
-                            new Vector2(0.5f, 0.5f)
-                        );
-                    }
-                }
-            }
-
-            Debug.Log($"Button texts and images loaded for User ID: {userId}");
-        }
-        else
+        if (!userData.ContainsKey(userId))
         {
             Debug.LogWarning($"No data found for User ID: {userId}");
+            return;
         }
+
+        UserPosts posts = userData[userId];
+
+        textBoxes.ForEach(Destroy);
+        imageBoxes.ForEach(Destroy);
+        pages.ForEach(Destroy);
+
+        textBoxes.Clear();
+        imageBoxes.Clear();
+        pages.Clear();
+
+        foreach (var post in posts.posts)
+        {
+            GameObject newObj = null;
+
+            if (post.type == "TextBox")
+            {
+                newObj = Instantiate(textBoxPrefab, parent);
+                TMP_Text textComponent = newObj.GetComponentInChildren<TMP_Text>();
+                if (textComponent != null)
+                {
+                    textComponent.text = post.content;
+                }
+                AddTextBox(newObj);
+            }
+            else if (post.type == "ImageBox")
+            {
+                newObj = Instantiate(imageBoxPrefab, parent);
+                Image imageComponent = newObj.GetComponent<Image>();
+                if (!string.IsNullOrEmpty(post.imageBase64))
+                {
+                    Texture2D texture = Base64ToTexture(post.imageBase64);
+                    imageComponent.sprite = Sprite.Create(
+                        texture,
+                        new Rect(0, 0, texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f)
+                    );
+                }
+                AddImageBox(newObj);
+            }
+            else if (post.type == "Page")
+            {
+                newObj = Instantiate(pagePrefab, parent);
+                AddPage(newObj);
+            }
+
+            if (newObj != null)
+            {
+                newObj.transform.position = post.position;
+                newObj.transform.localScale = post.scale;
+            }
+        }
+
+        Debug.Log($"Data loaded for User ID: {userId}");
     }
 
-    // Texture2D를 base64 문자열로 변환하는 메서드
     private string TextureToBase64(Texture2D texture)
     {
         byte[] textureBytes = texture.EncodeToPNG();
         return System.Convert.ToBase64String(textureBytes);
     }
 
-    // base64 문자열을 Texture2D로 변환하는 메서드
     private Texture2D Base64ToTexture(string base64)
     {
         byte[] textureBytes = System.Convert.FromBase64String(base64);
@@ -165,51 +200,55 @@ public class SaveMgr_KJS : MonoBehaviour
         texture.LoadImage(textureBytes);
         return texture;
     }
+}
 
-    [System.Serializable]
-    private class PostInfo
+[System.Serializable]
+public class PostInfo
+{
+    public string type;
+    public string content;
+    public string imageBase64;
+    public Vector3 position;
+    public Vector3 scale;
+
+    public PostInfo(string type, string content, string imageBase64, Vector3 position, Vector3 scale)
     {
-        public string editorName;
-        public string content;
-        public string imageBase64;  // 이미지 데이터 (base64 문자열)
+        this.type = type;
+        this.content = content;
+        this.imageBase64 = imageBase64;
+        this.position = position;
+        this.scale = scale;
+    }
+}
 
-        public PostInfo(string editorName, string content, string imageBase64)
+[System.Serializable]
+public class UserPosts
+{
+    public List<PostInfo> posts = new List<PostInfo>();
+}
+
+[System.Serializable]
+public class SerializableDictionary
+{
+    public List<string> keys = new List<string>();
+    public List<UserPosts> values = new List<UserPosts>();
+
+    public SerializableDictionary(Dictionary<string, UserPosts> dictionary)
+    {
+        foreach (var kvp in dictionary)
         {
-            this.editorName = editorName;
-            this.content = content;
-            this.imageBase64 = imageBase64;
+            keys.Add(kvp.Key);
+            values.Add(kvp.Value);
         }
     }
 
-    [System.Serializable]
-    private class UserPosts
+    public Dictionary<string, UserPosts> ToDictionary()
     {
-        public List<PostInfo> posts = new List<PostInfo>();
-    }
-
-    [System.Serializable]
-    private class SerializableDictionary
-    {
-        public List<string> keys = new List<string>();
-        public List<UserPosts> values = new List<UserPosts>();
-
-        public SerializableDictionary(Dictionary<string, UserPosts> dictionary)
+        var dict = new Dictionary<string, UserPosts>();
+        for (int i = 0; i < keys.Count; i++)
         {
-            foreach (var kvp in dictionary)
-            {
-                keys.Add(kvp.Key);
-                values.Add(kvp.Value);
-            }
+            dict[keys[i]] = values[i];
         }
-
-        public Dictionary<string, UserPosts> ToDictionary()
-        {
-            Dictionary<string, UserPosts> dictionary = new Dictionary<string, UserPosts>();
-            for (int i = 0; i < keys.Count; i++)
-            {
-                dictionary[keys[i]] = values[i];
-            }
-            return dictionary;
-        }
+        return dict;
     }
 }

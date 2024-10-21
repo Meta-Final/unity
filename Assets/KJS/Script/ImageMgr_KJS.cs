@@ -7,14 +7,15 @@ using SFB;   // StandaloneFileBrowser 네임스페이스 사용
 
 public class ImageMgr_KJS : MonoBehaviour
 {
-    public List<Button> buttons;  // 이미지가 할당될 여러 버튼들
+    public List<Button> buttons = new List<Button>();  // 동적으로 생성된 버튼들
 
-    private void Start()
+    // 새로 생성된 버튼을 리스트에 추가하고 이벤트 연결
+    public void AddButton(Button newButton)
     {
-        // 각 버튼에 클릭 이벤트 연결
-        foreach (Button button in buttons)
+        if (newButton != null)
         {
-            button.onClick.AddListener(() => OnButtonClick(button));
+            buttons.Add(newButton);
+            newButton.onClick.AddListener(() => OnButtonClick(newButton));
         }
     }
 
@@ -60,11 +61,9 @@ public class ImageMgr_KJS : MonoBehaviour
     // 버튼의 Text 또는 TMP_Text 컴포넌트를 숨기는 메서드
     private void HideButtonText(Button button)
     {
-        // 버튼 자식 오브젝트들에서 Text 또는 TMP_Text 컴포넌트를 찾기
         Text uiText = button.GetComponentInChildren<Text>();
         TMP_Text tmpText = button.GetComponentInChildren<TMP_Text>();
 
-        // 각각의 텍스트를 비활성화
         if (uiText != null) uiText.gameObject.SetActive(false);
         if (tmpText != null) tmpText.gameObject.SetActive(false);
     }
