@@ -22,10 +22,12 @@ public class ScreenCaptureManager : MonoBehaviour
     // 캡처된 이미지 유니티 화면에 미리보기
     public RawImage displayImage;
 
+    bool isCapturing = false;
+
     void Update()
     {
         // 마우스의 왼쪽 버튼을 눌렀을 때 드래그 시작
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isCapturing)
         {
             StartDrag();
         }
@@ -73,6 +75,7 @@ public class ScreenCaptureManager : MonoBehaviour
     private void EndDrag()
     {
         isDragging = false; //드래그 비활성화
+        isCapturing = false;
     }
 
     private IEnumerator CaptureScreen()
@@ -105,6 +108,11 @@ public class ScreenCaptureManager : MonoBehaviour
         // 이미지를 인벤토리에 추가
         //string base64 = System.Convert.ToBase64String(bytes);
         //InventoryManager.instance.addScreen(base64);
+    }
+
+    public void OnClickedButton()
+    {
+        isCapturing = true;
     }
 
     

@@ -6,12 +6,21 @@ using UnityEngine.UIElements;
 public class ButtonContent : MonoBehaviour
 {
     public GameObject MagCanvas;
-
+    public GameObject exitButton;
     public Button scarbButton;
-    // Start is called before the first frame update
+
+    Button btn_Exit;
     void Start()
     {
-        
+        MagCanvas = GameObject.Find("CanvasMag");
+
+        MagCanvas.SetActive(false);
+
+        //exitButton = MagCanvas.transform.GetChild(8).gameObject;
+
+       // btn_Exit = exitButton.GetComponent<Button>();
+
+        //btn_Exit.onClick.AddListner(OnbuttonExitClick);
     }
 
     // Update is called once per frame
@@ -22,6 +31,12 @@ public class ButtonContent : MonoBehaviour
     public void OnButtonClick()
     {
         // 캔버스 활성화/비활성화
-        MagCanvas.SetActive(!MagCanvas.activeSelf);
+        //MagCanvas.SetActive(!MagCanvas.activeSelf);
+        MagCanvas.SetActive(true);
+    }
+
+    public void OnbuttonExitClick()
+    {
+        MagCanvas.SetActive(false);
     }
 }
