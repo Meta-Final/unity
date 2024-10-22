@@ -1424,7 +1424,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1068587581}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.5000002
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2036,21 +2036,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdca072da4e710346a97a32f3e6f5b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textBoxPrefab: {fileID: 6731804952794173625, guid: 6a8116a27f090544a8fada50005c89a8,
+  textBoxPrefab: {fileID: 6731804952794173625, guid: 45130ec97f3876142a8a5b7603617386,
     type: 3}
-  imageBoxPrefab: {fileID: 8322938767771967153, guid: 3baf69d18722ed24fa68b9f8d412f931,
-    type: 3}
-  pagePrefab: {fileID: 9193981295852427034, guid: 407574fad10c8e1418bb7104086dec33,
+  imageBoxPrefab: {fileID: 8322938767771967153, guid: 5b693cc20b8ac1246b51bcaf69fb6fb3,
     type: 3}
   parent: {fileID: 38830738747764296}
-  textBoxes: []
-  imageBoxes: []
-  pages: []
+  saveButton: {fileID: 1658433118}
+  loadButton: {fileID: 1669520562}
   userIds:
   - 1
   selectedUserIndex: 0
-  saveButton: {fileID: 1658433118}
-  loadButton: {fileID: 1669520562}
 --- !u!114 &1714844384
 MonoBehaviour:
   m_ObjectHideFlags: 0
