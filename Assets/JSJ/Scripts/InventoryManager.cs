@@ -11,17 +11,14 @@ public class ScreenshotData
     public List<string> screenshotList = new List<string>();
 }
 
+
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
-    public GameObject img_Background;
-    
-
     ScreenshotData screenshotData;
 
     public InventoryUI inventoryUI;
-
 
     private void Awake()
     {
@@ -35,11 +32,7 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        // 인벤토리 UI Toggle
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            img_Background.SetActive(!img_Background.activeSelf);
-        }
+        
     }
 
     // 스크린샷 로드
