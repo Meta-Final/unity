@@ -2058,6 +2058,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasMag
       objectReference: {fileID: 0}
+    - target: {fileID: 2950113155564866899, guid: 0fd71fb541958964f864ced633c2fa2f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4310506442816081402, guid: 0fd71fb541958964f864ced633c2fa2f,
         type: 3}
       propertyPath: m_Sprite

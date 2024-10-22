@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ButtonContent : MonoBehaviour
 {
     public GameObject MagCanvas;
+
+    public Button scarbButton;
     // Start is called before the first frame update
     void Start()
     {
