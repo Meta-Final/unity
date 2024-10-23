@@ -1096,11 +1096,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasMag
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 2950113155564866899, guid: 0fd71fb541958964f864ced633c2fa2f,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+=======
+    - target: {fileID: 4310506442816081402, guid: 0fd71fb541958964f864ced633c2fa2f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6dc3e79014cd88745a916379dc973800,
+        type: 3}
+    - target: {fileID: 5316192132218994100, guid: 0fd71fb541958964f864ced633c2fa2f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316192132218994100, guid: 0fd71fb541958964f864ced633c2fa2f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316192132218994100, guid: 0fd71fb541958964f864ced633c2fa2f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+>>>>>>> parent of 8d2e907 (Feat : MyRoomMenubar)
     - target: {fileID: 6509724439982501809, guid: 0fd71fb541958964f864ced633c2fa2f,
         type: 3}
       propertyPath: m_Pivot.x

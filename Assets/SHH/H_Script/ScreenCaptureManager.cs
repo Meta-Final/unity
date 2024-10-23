@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 using System.IO;
 using System;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ScreenCaptureManager : MonoBehaviour
 {
@@ -80,45 +79,45 @@ public class ScreenCaptureManager : MonoBehaviour
 
     private IEnumerator CaptureScreen()
     {
-        // 잠시 대기하여 드래그가 완료된 후 캡처 한다
+        // 잠시 대기하여 드래그가 완료된 후 캡처를 시작합니다.
         yield return new WaitForEndOfFrame();
         print("캡쳐성공!");
 
-        // 드래그 영역의 크기와 위치를 기반으로 텍스처 생성
+        // 드래그 영역의 크기와 위치를 기반으로 텍스처를 생성합니다.
         capturedTexture = new Texture2D((int)dragArea.width, (int)dragArea.height, TextureFormat.RGB24, false);
 
-        // ReadPixels 메서드의 y 좌표 반전을 위해 현재 드래그 영역의 Y 좌표를 조정
+        // ReadPixels 메서드의 y 좌표 반전을 위해 현재 드래그 영역의 Y 좌표를 조정합니다.
         capturedTexture.ReadPixels(new Rect(dragArea.x, Screen.height - dragArea.yMax, dragArea.width, dragArea.height), 0, 0);
         capturedTexture.Apply();
 
-        // RawImage에 캡처된 텍스쳐를 보여준다.
+        // RawImage에 캡처된 텍스처를 할당합니다.
         if (displayImage != null)
         {
             displayImage.texture = capturedTexture;
         }
 
-        // 결과를 파일로 저장
+        // 결과를 파일로 저장하거나 사용할 수 있습니다.
         byte[] bytes = capturedTexture.EncodeToPNG();
-        string now = DateTime.Now.ToString();
-        now = now.Replace(":", "-");
-        System.IO.File.WriteAllBytes(Path.Combine(Application.dataPath, now + ".png"), bytes); //경로설정
+        System.IO.File.WriteAllBytes(Application.dataPath + "/CapturedImage.png", bytes);
         print("저장성공!");
 
-      
         // 이미지를 인벤토리에 추가
         //string base64 = System.Convert.ToBase64String(bytes);
-        //InventoryManager.instance.addScreen(base64);
+        //InventoryManager.instance.CaptureScreen(base64);
     }
 
+<<<<<<< HEAD
     public void OnClickedButton()
     {
         isCapturing = true;
     }
 
     
+=======
+>>>>>>> parent of 8d2e907 (Feat : MyRoomMenubar)
     private void OnGUI()
     {
-        // 드래그 영역 색상 및 모양
+        // 드래그 영역 시각화
         if (isDragging)
         {
             GUI.color = new Color(1, 1, 0, 0.5f); // 반투명 노란색
