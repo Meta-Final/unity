@@ -123,10 +123,10 @@ public class InventoryUI : MonoBehaviour
             {
                 postItImage.texture = selectScreenshot;
 
-                //print("1");
-                //float originWidth = selectScreenshot.width;
-                //float originHeight = selectScreenshot.height;
-                //float aspectRatio = originWidth / originHeight;
+                print("1");
+                float originWidth = selectScreenshot.width;
+                float originHeight = selectScreenshot.height;
+                float aspectRatio = originWidth / originHeight;
 
                 //RectTransform postItRectTransform = newPostIt.GetComponent<RectTransform>();
 
@@ -135,7 +135,7 @@ public class InventoryUI : MonoBehaviour
                 //    print("22222");
                 //    float baseWidth = 0.8f;
                 //    float baseHeight = baseWidth / aspectRatio;
-                    
+
 
                 //    postItRectTransform.sizeDelta = new Vector2(baseWidth, baseHeight);
 
@@ -146,6 +146,9 @@ public class InventoryUI : MonoBehaviour
                 //        imageRectTransform.sizeDelta = new Vector2(baseWidth, baseHeight);
                 //    }
                 //}
+
+                // Scale
+                
             }
         }
 
