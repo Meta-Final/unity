@@ -122,7 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD:Assets/SHH/H_Scene/MagScene.unity
 --- !u!1 &28962542
+=======
+--- !u!1 &66423092
+>>>>>>> f58af5b8bf78c704bf22fbef769d86bbf1ce322f:Assets/JSJ/Scenes/TextEditor_Scene.unity
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -886,7 +890,18 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+<<<<<<< HEAD:Assets/SHH/H_Scene/MagScene.unity
   - {fileID: 1146684069}
   - {fileID: 1431922479}
   - {fileID: 100748045}
   - {fileID: 1811520620}
+=======
+  - {fileID: 961739753}
+  - {fileID: 203844589}
+  - {fileID: 1160234427}
+  - {fileID: 1431511613}
+  - {fileID: 66423093}
+  - {fileID: 1385638633}
+  - {fileID: 1521236085}
+  - {fileID: 1966998917}
+>>>>>>> f58af5b8bf78c704bf22fbef769d86bbf1ce322f:Assets/JSJ/Scenes/TextEditor_Scene.unity
