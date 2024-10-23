@@ -2040,12 +2040,17 @@ MonoBehaviour:
     type: 3}
   imageBoxPrefab: {fileID: 8322938767771967153, guid: 5b693cc20b8ac1246b51bcaf69fb6fb3,
     type: 3}
+  pagePrefab: {fileID: 0}
   parent: {fileID: 38830738747764296}
-  saveButton: {fileID: 1658433118}
-  loadButton: {fileID: 1669520562}
+  pagesParentTransform: {fileID: 0}
+  textBoxes: []
+  imageBoxes: []
+  pages: []
   userIds:
   - 1
   selectedUserIndex: 0
+  saveButton: {fileID: 1658433118}
+  loadButton: {fileID: 1669520562}
 --- !u!114 &1714844384
 MonoBehaviour:
   m_ObjectHideFlags: 0

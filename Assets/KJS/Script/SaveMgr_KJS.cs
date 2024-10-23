@@ -90,16 +90,24 @@ public class SaveMgr_KJS : MonoBehaviour
         UserPosts posts = userData[userId];
         posts.posts.Clear();
 
-        // 텍스트 박스 저장
+        // 유효한 텍스트 박스만 저장
+        textBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
         foreach (var textBox in textBoxes)
         {
             TMP_Text textComponent = textBox.GetComponentInChildren<TMP_Text>();
             string content = textComponent != null ? textComponent.text : "";
 
-            posts.posts.Add(new PostInfo("TextBox", content, null, textBox.transform.position, textBox.transform.localScale));
+            posts.posts.Add(new PostInfo(
+                "TextBox",
+                content,
+                null,
+                textBox.transform.position,
+                textBox.transform.localScale
+            ));
         }
 
-        // 이미지 박스 저장
+        // 유효한 이미지 박스만 저장
+        imageBoxes.RemoveAll(item => item == null);  // null 오브젝트 제거
         foreach (var imageBox in imageBoxes)
         {
             Image imageComponent = imageBox.transform.GetChild(0).GetComponent<Image>();
@@ -111,15 +119,29 @@ public class SaveMgr_KJS : MonoBehaviour
                 imageData = texture.EncodeToPNG();
             }
 
-            posts.posts.Add(new PostInfo("ImageBox", "", imageData, imageBox.transform.position, imageBox.transform.localScale));
+            posts.posts.Add(new PostInfo(
+                "ImageBox",
+                "",
+                imageData,
+                imageBox.transform.position,
+                imageBox.transform.localScale
+            ));
         }
 
-        // 페이지 프리팹 저장
+        // 유효한 페이지만 저장
+        pages.RemoveAll(item => item == null);  // null 오브젝트 제거
         foreach (var page in pages)
         {
-            posts.posts.Add(new PostInfo("Page", "", null, page.transform.position, page.transform.localScale));
+            posts.posts.Add(new PostInfo(
+                "Page",
+                "",
+                null,
+                page.transform.position,
+                page.transform.localScale
+            ));
         }
 
+        // JSON으로 변환 후 파일에 저장
         string json = JsonUtility.ToJson(new SerializableDictionary(userData), true);
         File.WriteAllText(savePath, json);
 

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Delete_KJS : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
+    private SaveMgr_KJS saveManager;  // SaveMgr_KJS 참조
     //public Button deleteButton;  // 삭제 버튼 (필요에 따라 남겨둠)
     private ToolMgr_KJS toolManager;  // ToolMgr_KJS 스크립트 참조
     private bool isDragging = false;  // 드래그 중인지 여부
@@ -50,13 +51,28 @@ public class Delete_KJS : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     {
         Debug.Log($"{gameObject.name} 삭제됨.");
 
-        // ToolMgr_KJS가 있을 경우 패널 비활성화
-        if (toolManager != null && toolManager.editorPanel != null)
+        // SaveMgr_KJS의 리스트에서 해당 오브젝트 제거
+        if (saveManager != null)
         {
-            toolManager.editorPanel.SetActive(false);  // 패널 비활성화
+            if (saveManager.textBoxes.Contains(gameObject))
+            {
+                saveManager.textBoxes.Remove(gameObject);
+                Debug.Log($"{gameObject.name}이 텍스트 박스 리스트에서 제거되었습니다.");
+            }
+            else if (saveManager.imageBoxes.Contains(gameObject))
+            {
+                saveManager.imageBoxes.Remove(gameObject);
+                Debug.Log($"{gameObject.name}이 이미지 박스 리스트에서 제거되었습니다.");
+            }
+            else if (saveManager.pages.Contains(gameObject))
+            {
+                saveManager.pages.Remove(gameObject);
+                Debug.Log($"{gameObject.name}이 페이지 리스트에서 제거되었습니다.");
+            }
         }
 
-        Destroy(gameObject);  // 자신(텍스트 박스 오브젝트)을 파괴
+        // 오브젝트 삭제
+        Destroy(gameObject);
     }
 
     // 왼쪽 클릭으로 드래그 시작
