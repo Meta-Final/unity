@@ -44,6 +44,8 @@ public class PostMgr : MonoBehaviour
             PostThumb post = go.GetComponent<PostThumb>();
             post.SetInfo(allPost[i]);
         }
+
+        //GameObject.Find("CanvasMag") ;
     }
 
 

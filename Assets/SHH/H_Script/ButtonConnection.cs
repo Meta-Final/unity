@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ButtonContent : MonoBehaviour
+public class ButtonConnection : MonoBehaviour
 {
     public GameObject MagCanvas;
     public GameObject ChannelCanvas;
@@ -16,19 +16,14 @@ public class ButtonContent : MonoBehaviour
         MagCanvas = GameObject.Find("CanvasMag");
         ChannelCanvas = GameObject.Find("ChannelCanvas");
 
-        MagCanvas.SetActive(false);
+        //MagCanvas.SetActive(false);
 
-        //exitButton = MagCanvas.transform.GetChild(8).gameObject;
-
-       // btn_Exit = exitButton.GetComponent<Button>();
-
-        //btn_Exit.onClick.AddListner(OnbuttonExitClick);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void OnButtonClick()
     {
@@ -37,9 +32,6 @@ public class ButtonContent : MonoBehaviour
         MagCanvas.SetActive(true);
         ChannelCanvas.SetActive(false);
     }
-
-    //public void OnbuttonExitClick()
-    //{
-    //    MagCanvas.SetActive(false);
-    //}
 }
+
+
